@@ -23,7 +23,8 @@ class UserController{
         //var de escopo, somente no getValues
         let user = {};
 
-        this.formEl.elements.forEach(function (field, index) {                                                //para cada campo do formulario
+        //spread
+        [...this.formEl.elements].forEach(function (field, index) {                                                //para cada campo do formulario
 
             if(field.name == "gender"){
 
