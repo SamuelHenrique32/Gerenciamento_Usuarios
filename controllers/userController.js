@@ -15,38 +15,56 @@ class UserController{
 
             let values = this.getValues();
 
-            this.getPhoto((content)=>{
+            //se der certo, se der errado
+            this.getPhoto().then(
+                (content)=> {
+
                 values.photo = content;
 
                 //foto esta ok, add linha
                 this.addLine(values);
+            },
+            (e)=> {
+                console.error(e);
             });
+
         });
     }
 
-    getPhoto(callback){
+    getPhoto(){
 
-        let fileReader = new FileReader();
+        //se der certo, executa um, senao o outro
+        //alterado para arrow function pois o ...this muda de contexto
+        return new Promise((resolve, reject)=>{
 
-        //gera novo array com dados filtrados
-        let elements = [...this.formEl.elements].filter(item=>{
+            let fileReader = new FileReader();
 
-            if (item.name === 'photo'){
-                return item;
-            }
+            //gera novo array com dados filtrados
+            let elements = [...this.formEl.elements].filter(item=>{
+
+                if (item.name === 'photo'){
+                    return item;
+                }
+            });
+
+            //um arquivo da colecao
+            let file = elements[0].files[0];
+
+            //quando foto terminar, acontece em paralelo, funcao de callback
+            fileReader.onload = ()=>{
+
+                //base 64, consegue colocar na tag img (forma compactada, codigo serializado)
+                //deu certo
+                resolve(fileReader.result);
+            };
+
+            fileReader.onerror = (e)=>{
+
+                reject(e);
+            };
+
+            fileReader.readAsDataURL(file);
         });
-
-        //um arquivo da colecao
-        let file = elements[0].files[0];
-
-        //quando foto terminar, acontece em paralelo, funcao de callback
-        fileReader.onload = ()=>{
-
-            //base 64, consegue colocar na tag img (forma compactada, codigo serializado)
-            callback(fileReader.result);
-        };
-
-        fileReader.readAsDataURL(file);
     }
 
     getValues(){
