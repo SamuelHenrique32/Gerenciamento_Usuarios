@@ -89,9 +89,18 @@ class UserController{
 
         //var de escopo, somente no getValues
         let user = {};
+        let isValid = true;
 
         //spread
         [...this.formEl.elements].forEach(function (field, index) {                                                //para cada campo do formulario
+
+            //e nao vazio
+            if(['name', 'email', 'password'].indexOf(field.name) > -1 && !field.value){
+
+                //add classe css
+                field.parentElement.classList.add('has-error');
+                isValid = false;
+            }
 
             if(field.name == "gender"){
 
@@ -106,6 +115,10 @@ class UserController{
             }
 
         });
+
+        if(!isValid){
+            return false;
+        }
 
         //Json -> classe User
         return new User(
