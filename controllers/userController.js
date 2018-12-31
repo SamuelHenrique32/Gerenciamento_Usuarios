@@ -13,6 +13,12 @@ class UserController{
             //cancela comportamento padrao, nao manda mais via get
             event.preventDefault();
 
+            //recupera botao
+            let btn = this.formEl.querySelector("[type=submit]");
+
+            //desabilita botao
+            btn.disabled = true;
+
             let values = this.getValues();
 
             //se der certo, se der errado
@@ -23,6 +29,11 @@ class UserController{
 
                 //foto esta ok, add linha
                 this.addLine(values);
+
+                //limpa formulario
+                this.formEl.reset();
+
+                btn.disabled = false;
             },
             (e)=> {
                 console.error(e);
@@ -119,7 +130,7 @@ class UserController{
                  <td>${dataUser.name}</td>
                  <td>${dataUser.email}</td>
                  <td>${(dataUser.admin) ? 'Sim' : 'Não'}</td>
-                 <td>${dataUser.birth}</td>
+                 <td>${dataUser.register}</td>
                  <td>
                      <button type="button" class="btn btn-primary btn-xs btn-flat">Editar</button>
                      <button type="button" class="btn btn-danger btn-xs btn-flat">Excluir</button>
