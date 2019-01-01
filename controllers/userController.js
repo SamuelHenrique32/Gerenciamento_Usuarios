@@ -21,6 +21,8 @@ class UserController{
 
             let values = this.getValues();
 
+            if(!values) return false;
+
             //se der certo, se der errado
             this.getPhoto().then(
                 (content)=> {
@@ -138,6 +140,10 @@ class UserController{
 
         let tr = document.createElement('tr');
 
+        //.user e nome que escolhemos, funciona como variavel
+        //converte objeto para String em JSON
+        tr.dataset.user = JSON.stringify(dataUser);
+
         tr.innerHTML = `
                  <td><img src="${dataUser.photo}" alt="User Image" class="img-circle img-sm"></td>
                  <td>${dataUser.name}</td>
@@ -151,5 +157,28 @@ class UserController{
         `;
 
         this.tableEl.appendChild(tr);
+
+        this.updateCount();
+    }
+
+    updateCount(){
+
+        let numberUsers = 0;
+        let numberAdmin = 0;
+
+        //transforma em array para realizar foreach
+        [...this.tableEl.children].forEach(tr=>{
+
+            numberUsers++;
+
+            //de JSON volta a ser objeto
+            let user = JSON.parse(tr.dataset.user);
+
+            if(user._admin) numberAdmin++;
+        });
+
+        //busca elemento e atualiza valor
+        document.querySelector("#number-users").innerHTML = numberUsers;
+        document.querySelector("#number-users-admin").innerHTML = numberAdmin;
     }
 }
