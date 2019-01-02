@@ -171,8 +171,23 @@ class UserController{
         //add escuta, e poderia ser qualquer palavra
         tr.querySelector(".btn-edit").addEventListener("click", e=>{
 
-            console.log(JSON.parse(tr.dataset.user));
+            let json = JSON.parse(tr.dataset.user);
+            let form = document.querySelector("#form-user-update");
 
+            //para cada campo que passar, preenche
+            for (let name in json){
+
+                let field = form.querySelector("[name=" + name.replace("_","") + "]");
+
+                //verificar se campo existe
+                if(field){
+                    //passa para proxima iteracao
+                    if(field.type == 'file') continue;
+                    field.value = json[name];
+                }
+            }
+
+            //exibe formulario
             this.showPanelUpdate();
         });
 
