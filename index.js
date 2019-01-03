@@ -1,1 +1,1 @@
-let userController = new UserController("form-user-create", "table-users");             //amarra formulario a tabela
+let userController = new UserController("form-user-create", "form-user-update", "table-users");             //amarra formulario a tabela
