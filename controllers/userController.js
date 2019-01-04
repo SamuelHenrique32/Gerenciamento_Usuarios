@@ -53,23 +53,11 @@ class UserController{
                         result._photo = content;
                     }
 
-                    //retorna tr a ser alterada
-                    tr.dataset.user = JSON.stringify(result);
+                    let user = new User();
 
-                    //atualiza linha
-                    tr.innerHTML = `
-                         <td><img src="${result._photo}" alt="User Image" class="img-circle img-sm"></td>
-                         <td>${result._name}</td>
-                         <td>${result._email}</td>
-                         <td>${(result._admin) ? 'Sim' : 'Não'}</td>
-                         <td>${Utils.dateFormat(result._register)}</td>
-                         <td>
-                             <button type="button" class="btn btn-primary btn-edit btn-xs btn-flat">Editar</button>
-                             <button type="button" class="btn btn-danger btn-xs btn-flat">Excluir</button>
-                         </td>
-                    `;
+                    user.loadFromJSON(result);
 
-                    this.addEventsTr(tr);
+                    this.getTr(user, tr);
 
                     this.updateCount();
 
@@ -260,7 +248,19 @@ class UserController{
     //template
     addLine(dataUser){
 
-        let tr = document.createElement('tr');
+        let tr = this.getTr(dataUser);
+
+        //add no final
+        this.tableEl.appendChild(tr);
+
+        this.updateCount();
+    }
+
+    getTr(dataUser, tr = null){
+
+        if(tr === null){
+            tr = document.createElement('tr');
+        }
 
         //.user e nome que escolhemos, funciona como variavel
         //converte objeto para String em JSON
@@ -280,9 +280,7 @@ class UserController{
 
         this.addEventsTr(tr);
 
-        this.tableEl.appendChild(tr);
-
-        this.updateCount();
+        return tr;
     }
 
     addEventsTr(tr){
