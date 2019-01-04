@@ -6,6 +6,8 @@ class UserController{
         this.tableEl = document.getElementById(tableId);
         this.onSubmit();
         this.onEdit();
+        //recupera session storage
+        this.selectAll();
     }
 
     onEdit(){
@@ -107,6 +109,8 @@ class UserController{
                 (content)=> {
 
                 values.photo = content;
+
+                this.insert(values);
 
                 //foto esta ok, add linha
                 this.addLine(values);
@@ -212,6 +216,44 @@ class UserController{
             user.photo,
             user.admin
         );
+    }
+
+    getUsersStorage(){
+
+        let users = [];
+
+        if(sessionStorage.getItem("users")){
+
+            users = JSON.parse(sessionStorage.getItem("users"));
+        }
+
+        return users;
+    }
+
+    //listar dados que ja estao no session storage
+    selectAll(){
+
+        let users = this.getUsersStorage();
+
+        users.forEach(dataUser=>{
+
+            let user = new User();
+
+            user.loadFromJSON(dataUser);
+
+            this.addLine(user);
+        });
+    }
+
+    insert(data){
+
+        let users = this.getUsersStorage();
+
+        users.push(data);
+
+        //nao salva objeto
+        //chave, valor
+        sessionStorage.setItem("users", JSON.stringify(users));
     }
 
     //template
