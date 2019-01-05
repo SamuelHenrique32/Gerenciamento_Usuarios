@@ -89,15 +89,19 @@ class User{
 
     getNewID(){
 
+        let usersID = parseInt(localStorage.getItem("usersID"));
+
         //guardar id em local global
         //se nao existir cria com zero
-        if(!window.id){
-            window.id = 0;
+        if(!usersID > 0){
+            usersID = 0;
         }
 
-        id++;
+        usersID++;
 
-        return id;
+        localStorage.setItem("usersID", usersID);
+
+        return usersID;
     }
 
     save(){
@@ -125,6 +129,24 @@ class User{
             users.push(this);
         }
 
+        localStorage.setItem("users", JSON.stringify(users));
+    }
+
+    remove(){
+
+        let users = User.getUsersStorage();
+
+        users.forEach((userData, index)=>{
+
+            //achou usuario para exclusao
+            if(this._id == userData._id){
+
+                // a partir do objeto, exclui 1
+                users.splice(index, 1);
+            }
+        });
+
+        //guarda array novamente
         localStorage.setItem("users", JSON.stringify(users));
     }
 }
